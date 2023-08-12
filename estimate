@@ -1,0 +1,46 @@
+# Feature Importance 
+import shap
+
+# Ignore Warnings 
+import warnings
+warnings.filterwarnings('ignore')
+
+#imput miss
+from sklearn.impute import SimpleImputer
+
+#Read train data
+train = pd.read_csv('../input/home-01/train_data.csv')
+print(train.info())
+#Read test data
+test= pd.read_csv('../input/home-01/test_data.csv')
+print(test.info())
+
+sns.heatmap(train.isnull(),yticklabels=False,cbar=False)
+train= train.drop(['PoolQC','Alley','MiscFeature','Fence','FireplaceQu'],axis=1)
+
+#Get the columns which has missing values and number of mising values and column type
+for i in train.columns:
+    if(train[i].isnull().sum()):
+        print(i,train[i].isnull().sum(), train[i].dtype)
+
+train['LotFrontage']=train['LotFrontage'].fillna(train['LotFrontage'].mean())
+train['MasVnrArea'].fillna(train['MasVnrArea'].mean(),inplace=True)
+train['MasVnrType'].fillna(train['MasVnrType'].mode()[0],inplace=True)
+train['BsmtQual'].fillna(train['BsmtQual'].mode()[0],inplace=True)
+train['BsmtCond'].fillna(train['BsmtCond'].mode()[0],inplace=True)
+train['BsmtExposure'].fillna(train['BsmtExposure'].mode()[0],inplace=True)
+train['BsmtFinType1'].fillna(train['BsmtFinType1'].mode()[0],inplace=True)
+train['BsmtFinType2'].fillna(train['BsmtFinType2'].mode()[0],inplace=True)
+train['Electrical'].fillna(train['Electrical'].mode()[0],inplace=True)
+train['GarageType'].fillna(train['GarageType'].mode()[0],inplace=True)
+train['GarageYrBlt'].fillna(train['GarageYrBlt'].mean(),inplace=True)
+train['GarageFinish'].fillna(train['GarageFinish'].mode()[0],inplace=True)
+train['GarageQual'].fillna(train['GarageQual'].mode()[0],inplace=True)
+train['GarageCond'].fillna(train['GarageCond'].mode()[0],inplace=True)
+
+#test data
+col_list = []
+for col in train.columns:
+    if train[col].dtype=='O':
+        col_list.append(train)
+        len(col_list)
